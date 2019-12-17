@@ -57,49 +57,100 @@
 
             createTask(compleatedList, label.innerText);
 
-            removeTask(li)
+            removeTask(li);
         })
 
         li.querySelector('.deleteBtn').addEventListener('click', function(){
-            removeTask(li)
+            removeTask(li);
         })
 
         li.querySelector('.editBtn').addEventListener('click', function(){
-            // li.querySelector('.form-check').setAttribute('hidden', true);
+            makeEditMode(li);
+        })
+
+        li.querySelector('.cancelBtn')
+        .addEventListener('click', function(){
+
+            rebootTask(li);
+        })
+
+        li.querySelector('.saveBtn')
+        .addEventListener('click', function(){
+
+            let editText = li.querySelector('input[type="text"]').value;
+            li.querySelector('label').innerText = editText;
+            
+            makeReadMode(li);
+            
+        })
+
+        li.querySelector('input[type="text"]')
+        .addEventListener('keypress', function(e){
+            if (e.keyCode==13){
+                saveTask(li);
+            }
+
+        })
+
+        li.querySelector('input[type="text"]')
+        .addEventListener('keyup', function(e){
+            if (e.keyCode==27){
+                rebootTask(li);
+            }
+
+        })
+
+        
+    }
+}
+
+    function saveTask(target){
+        let editText = target.querySelector('input[type="text"]').value;
+            target.querySelector('label').innerText = editText;
+            
+                makeReadMode(target);
+    }
+
+    function makeReadMode(target){
+        changeVisibility(target, [
+            '.form-control',
+            '.saveBtn', 
+            '.cancelBtn', 
+            ], true);
+
+        changeVisibility(target, [
+            '.form-check',
+            '.deleteBtn', 
+            '.editBtn', 
+        ], false);
+    }
+
+    function rebootTask(target){
+        let defaultText = target.querySelector('label').innerText
+        target.querySelector('input[type="text"]').value = defaultText;
+
+        makeReadMode(target);
+    }
+
+
+    function makeEditMode(target){
+        // li.querySelector('.form-check').setAttribute('hidden', true);
             // li.querySelector('.deleteBtn').setAttribute('hidden', true);
             // li.querySelector('.editBtn').setAttribute('hidden', true);
 
-            changeVisibility(li, ['.form-check', '.deleteBtn', '.editBtn'], true);
+            changeVisibility(target, ['.form-check', '.deleteBtn', '.editBtn'], true);
 
 
             // li.querySelector('.saveBtn').removeAttribute('hidden');
             // li.querySelector('.cancelBtn').removeAttribute('hidden');
             // li.querySelector('.form-control').removeAttribute('hidden');
 
-            changeVisibility(li, [
+            changeVisibility(target, [
                 '.saveBtn', 
                 '.cancelBtn', 
                 '.form-control'
-            ], false)
-        })
-
-        li.querySelector('.cancelBtn')
-        .addEventListener('click', function(){
-            changeVisibility(li, [
-                '.form-control',
-                '.saveBtn', 
-                '.cancelBtn', 
-                ], true);
-
-
-            changeVisibility(li, [
-                '.form-check',
-                '.deleteBtn', 
-                '.editBtn', 
-            ], false)
-        })
+            ], false);
     }
-}
 
     function removeTask (target){
         target.remove();
